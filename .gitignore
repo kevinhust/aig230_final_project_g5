@@ -1,0 +1,34 @@
+# Environment Variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Project tracking and reports
+PLAN.md
+PROGRESS.md
+tasks.md
+walkthrough.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.ipynb_checkpoints/
+
+# Data and Database
+data/chroma_db/
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+.claude/
