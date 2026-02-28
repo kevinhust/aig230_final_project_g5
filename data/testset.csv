@@ -1,0 +1,31 @@
+question,language,ground_truth,category,sentiment
+"我的fridge噪音大，保修怎么走？",zh-en,"Check if level, 1-year warranty covers unusual noise, contact support with order ID",appliance,neutral
+"How do I request a return for my broken washer?",en,"Returns within 30 days, free shipping label provided for broken units",appliance,neutral
+"Mon téléphone ne s'allume pas, que faire ?",fr,"Charge 30 min with original charger, contact tech support if persists",electronics,neutral
+"¿Cómo solicito una devolución de mi smartphone?",es,"Request through customer portal within 14 days, device must be like-new",electronics,neutral
+"Do you ship to Toronto?",en,"Yes, all provinces in Canada, 3-5 business days standard shipping",shipping,neutral
+"你们支持发货到多伦多吗？",zh,"是的，支持发货到多伦多及全加拿大",shipping,neutral
+"我的laptop screen flickering，warranty能cover吗？",zh-en,"Yes covered under 1-year warranty, contact support with order number",electronics,neutral
+"Order还没到，tracking不动了，what happened?",zh-en,"Wait 48h for tracking update, contact support with order number if no movement",shipping,neutral
+"Fridge no enfriando, warranty?",es-en,"1-year warranty covers cooling issues, contact support for repair",appliance,neutral
+"我的phone screen cracked，能修吗？warranty cover吗？",zh-en,"Not covered by standard warranty, repair service from $99, check extended protection",electronics,neutral
+"This is UNACCEPTABLE! I've been waiting 2 weeks!!!",en,"Apologize, escalate to shipping team, offer refund or expedited delivery",escalation,angry
+"太离谱了！等了两个星期还没收到！！！",zh,"道歉，升级处理，提供退款或加急配送",escalation,angry
+"C'est terrible! Worst service ever! Je veux my money back!!!",fr-en,"Acknowledge frustration, offer immediate refund or solution",escalation,angry
+"Washer漏水了，floor都wet了，emergency！",zh-en,"Turn off and unplug immediately, check drain hose, contact support for emergency service",appliance,urgent
+"Microwave不heat了，怎么办？",zh-en,"Try different outlet, may need magnetron replacement covered by warranty",appliance,neutral
+"我的earbuds一边no sound，能换吗？",zh-en,"May be hardware defect covered by warranty, contact support with order number",electronics,neutral
+"Laptop battery die很快，能replace吗？under warranty?",zh-en,"Yes, battery degradation within 1 year covered by warranty",electronics,neutral
+"Dishwasher deja manchas, qué hago?",es-en,"Use rinse aid, clean filter, check water hardness settings",appliance,neutral
+"Headphones battery dura poco, es normal?",es-en,"Battery varies with volume and ANC, try disabling ANC and lowering volume",electronics,neutral
+"有student discount吗？我是学生",zh,"Yes, 15% off with .edu email verification",payment,neutral
+"Coupon code不work，why？",zh-en,"Check expiration, minimum purchase, item exclusions",payment,neutral
+"Size不对，想exchange，但是out of stock了",zh-en,"Can notify when restocked, offer alternatives, or refund to repurchase later",returns,neutral
+"收到的item damaged了，想return，怎么弄？",zh-en,"Take photos immediately, contact within 48h, arrange return and replacement/refund",returns,neutral
+"Payment failed，钱扣了但是order没成功",zh-en,"Auto refund in 3-5 business days, contact support with payment confirmation if no refund",payment,neutral
+"Mi pedido no ha llegado, où est mon colis?",es-fr,"Wait 48h for tracking update, contact support with order number",shipping,neutral
+"Article endommagé, quiero refund, comment faire?",fr-es,"Take photos, contact within 48h, arrange return and refund",returns,neutral
+"Les écouteurs tienen mal sonido, only one side works",fr-es-en,"Check audio balance, clean mesh, may be hardware defect for replacement",electronics,neutral
+"我想exchange这个shirt to a bigger size，怎么操作？",zh-en,"Go to order history, click Request Exchange, free within 30 days",returns,neutral
+"Can I get refund si no tengo el paquete original?",en-es,"Partial refund with 20% restocking fee possible, contact support for approval",returns,neutral
+"Mi teléfono no enciende, que faire?",es-fr,"Charge 30 min, contact support if persists, may be warranty covered",electronics,neutral

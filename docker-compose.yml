@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Gradio Web Interface
+  web:
+    build: .
+    ports:
+      - "7860:7860"
+    environment:
+      - HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
+    volumes:
+      - ./data:/app/data
+      - ./kb:/app/kb
+    command: python app.py
+
+  # FastAPI Backend
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
+    volumes:
+      - ./data:/app/data
+      - ./kb:/app/kb
+    command: python api.py
