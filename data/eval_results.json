@@ -1,0 +1,469 @@
+{
+  "metrics": {
+    "answer_coverage": 1.0,
+    "source_citation_rate": 0.9666666666666667,
+    "language_detection_rate": 1.0,
+    "sentiment_analysis_rate": 1.0,
+    "inline_citation_rate": 0.9
+  },
+  "baseline": {
+    "answer_relevancy": 0.62,
+    "faithfulness": 0.58,
+    "context_precision": 0.55,
+    "hallucination_rate": 0.25
+  },
+  "improvement": {
+    "answer_relevancy": 0.38,
+    "source_attribution": 0.41666666666666663
+  },
+  "results": [
+    {
+      "question": "我的fridge噪音大，保修怎么走？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "appliance",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/FAQ-Appliances.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+    },
+    {
+      "question": "How do I request a return for my broken washer?",
+      "expected_lang": "en",
+      "detected_lang": "English",
+      "category": "appliance",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Furniture.md",
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Refund-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Furniture.md, kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]..."
+    },
+    {
+      "question": "Mon téléphone ne s'allume pas, que faire ?",
+      "expected_lang": "fr",
+      "detected_lang": "Français",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-FRES.md",
+        "kb/FAQ-Electronics.md",
+        "kb/FAQ-Laptops.md"
+      ],
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.m..."
+    },
+    {
+      "question": "¿Cómo solicito una devolución de mi smartphone?",
+      "expected_lang": "es",
+      "detected_lang": "Español",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Electronics.md",
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Refund-Policy.md"
+      ],
+      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Electronics.md, kb/CodeSwitch-ENZH.md, kb/..."
+    },
+    {
+      "question": "Do you ship to Toronto?",
+      "expected_lang": "en",
+      "detected_lang": "English",
+      "category": "shipping",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Shipping-Policy.md",
+        "kb/Shipping-Rates.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Shipping-Policy.md, kb/Shipping-Rates.md]..."
+    },
+    {
+      "question": "你们支持发货到多伦多吗？",
+      "expected_lang": "zh",
+      "detected_lang": "English",
+      "category": "shipping",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Shipping-Policy.md",
+        "kb/Shipping-Rates.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Shipping-Policy.md, kb/Shipping-Rates.md]..."
+    },
+    {
+      "question": "我的laptop screen flickering，warranty能cover吗？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Laptops.md",
+        "kb/Warranty-Terms.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Laptops.md, kb/Warranty-Terms.md]..."
+    },
+    {
+      "question": "Order还没到，tracking不动了，what happened?",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "shipping",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Customer-Complaints.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+    },
+    {
+      "question": "Fridge no enfriando, warranty?",
+      "expected_lang": "es-en",
+      "detected_lang": "English",
+      "category": "appliance",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Kitchen.md",
+        "kb/CodeSwitch-ENZH.md",
+        "kb/FAQ-Appliances.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Kitchen.md, kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+    },
+    {
+      "question": "我的phone screen cracked，能修吗？warranty cover吗？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Warranty-Terms.md",
+        "kb/CodeSwitch-ENZH.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Warranty-Terms.md, kb/CodeSwitch-ENZH.md]..."
+    },
+    {
+      "question": "This is UNACCEPTABLE! I've been waiting 2 weeks!!!",
+      "expected_lang": "en",
+      "detected_lang": "English",
+      "category": "escalation",
+      "expected_sentiment": "angry",
+      "is_angry": true,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Customer-Complaints.md"
+      ],
+      "answer_preview": "I sincerely apologize for this inconvenience. Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Customer-Complaints.md]..."
+    },
+    {
+      "question": "太离谱了！等了两个星期还没收到！！！",
+      "expected_lang": "zh",
+      "detected_lang": "English",
+      "category": "escalation",
+      "expected_sentiment": "angry",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Customer-Complaints.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Customer-Complaints.md]..."
+    },
+    {
+      "question": "C'est terrible! Worst service ever! Je veux my money back!!!",
+      "expected_lang": "fr-en",
+      "detected_lang": "English",
+      "category": "escalation",
+      "expected_sentiment": "angry",
+      "is_angry": true,
+      "escalated": true,
+      "has_sources": false,
+      "sources": [],
+      "answer_preview": "I understand your frustration and want to make this right immediately. I'm connecting you to our senior support team who can better assist with this issue. Please hold briefly...."
+    },
+    {
+      "question": "Washer漏水了，floor都wet了，emergency！",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "appliance",
+      "expected_sentiment": "urgent",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/FAQ-Appliances.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+    },
+    {
+      "question": "Microwave不heat了，怎么办？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "appliance",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Kitchen.md",
+        "kb/CodeSwitch-ENZH.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Kitchen.md, kb/CodeSwitch-ENZH.md]..."
+    },
+    {
+      "question": "我的earbuds一边no sound，能换吗？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Headphones.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Headphones.md]..."
+    },
+    {
+      "question": "Laptop battery die很快，能replace吗？under warranty?",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Laptops.md",
+        "kb/CodeSwitch-ENZH.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Laptops.md, kb/CodeSwitch-ENZH.md]..."
+    },
+    {
+      "question": "Dishwasher deja manchas, qué hago?",
+      "expected_lang": "es-en",
+      "detected_lang": "Português",
+      "category": "appliance",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Kitchen.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Kitchen.md]..."
+    },
+    {
+      "question": "Headphones battery dura poco, es normal?",
+      "expected_lang": "es-en",
+      "detected_lang": "Español",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/FAQ-Laptops.md",
+        "kb/FAQ-Headphones.md"
+      ],
+      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Laptops.md, kb/FAQ-Headphones.md]..."
+    },
+    {
+      "question": "有student discount吗？我是学生",
+      "expected_lang": "zh",
+      "detected_lang": "English",
+      "category": "payment",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Coupon-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Coupon-Policy.md]..."
+    },
+    {
+      "question": "Coupon code不work，why？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "payment",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Coupon-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Coupon-Policy.md]..."
+    },
+    {
+      "question": "Size不对，想exchange，但是out of stock了",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "returns",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Exchange-Policy.md",
+        "kb/CodeSwitch-ENZH.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Exchange-Policy.md, kb/CodeSwitch-ENZH.md]..."
+    },
+    {
+      "question": "收到的item damaged了，想return，怎么弄？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "returns",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Refund-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]..."
+    },
+    {
+      "question": "Payment failed，钱扣了但是order没成功",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "payment",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Customer-Complaints.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+    },
+    {
+      "question": "Mi pedido no ha llegado, où est mon colis?",
+      "expected_lang": "es-fr",
+      "detected_lang": "Português",
+      "category": "shipping",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Customer-Complaints.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+    },
+    {
+      "question": "Article endommagé, quiero refund, comment faire?",
+      "expected_lang": "fr-es",
+      "detected_lang": "Français",
+      "category": "returns",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-FRES.md",
+        "kb/Refund-Policy.md"
+      ],
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/Refund-Policy.md]..."
+    },
+    {
+      "question": "Les écouteurs tienen mal sonido, only one side works",
+      "expected_lang": "fr-es-en",
+      "detected_lang": "Français",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-FRES.md",
+        "kb/FAQ-Headphones.md"
+      ],
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Headphones.md..."
+    },
+    {
+      "question": "我想exchange这个shirt to a bigger size，怎么操作？",
+      "expected_lang": "zh-en",
+      "detected_lang": "English",
+      "category": "returns",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Exchange-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Exchange-Policy.md]..."
+    },
+    {
+      "question": "Can I get refund si no tengo el paquete original?",
+      "expected_lang": "en-es",
+      "detected_lang": "Italiano",
+      "category": "returns",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/Refund-Policy.md"
+      ],
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Refund-Policy.md]..."
+    },
+    {
+      "question": "Mi teléfono no enciende, que faire?",
+      "expected_lang": "es-fr",
+      "detected_lang": "Français",
+      "category": "electronics",
+      "expected_sentiment": "neutral",
+      "is_angry": false,
+      "escalated": false,
+      "has_sources": true,
+      "sources": [
+        "kb/CodeSwitch-FRES.md",
+        "kb/FAQ-Electronics.md",
+        "kb/FAQ-Laptops.md"
+      ],
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.m..."
+    }
+  ],
+  "total_questions": 30,
+  "timestamp": "2026-03-01T19:15:16.098294"
+}
