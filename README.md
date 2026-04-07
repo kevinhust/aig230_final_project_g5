@@ -63,8 +63,8 @@ A multilingual customer service chatbot for e-commerce using Retrieval-Augmented
                 │
                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              Knowledge Base (17 Documents)                  │
-│  Product FAQs │ Policies │ Code-Switching │ Complaints     │
+│              Knowledge Base (40+ Documents)                  │
+│  Product FAQs (multilingual) │ Policies │ Code-Switching │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -212,32 +212,30 @@ aig230_final_project_g5/
 ├── Dockerfile             # Docker config
 ├── docker-compose.yml     # Multi-service
 ├── README.md              # This file
-├── PLAN.md                # Implementation plan
-├── PROGRESS.md            # Progress log
-├── walkthrough.md         # Technical guide
 │
 ├── src/
-│   ├── rag_pipeline.py    # Core RAG engine ⭐
+│   ├── rag_pipeline.py    # Core RAG engine
 │   ├── vector_store.py    # ChromaDB builder
 │   ├── sentiment.py       # Sentiment analysis
 │   ├── rag_eval.py        # Evaluation module
-│   ├── data_gen.py        # KB generator
+│   ├── gen_amazon_kb.py   # KB generator
+│   ├── data_gen.py        # Test data generator
 │   └── update_kb.py       # KB updater
 │
-├── kb/                    # Knowledge Base (17 files)
-│   ├── FAQ-Appliances.md
-│   ├── FAQ-Electronics.md
-│   ├── FAQ-Laptops.md
-│   ├── FAQ-Furniture.md
-│   ├── FAQ-Clothing.md
-│   ├── FAQ-Kitchen.md
-│   ├── FAQ-SmartHome.md
-│   ├── FAQ-Headphones.md
+├── kb/                    # Knowledge Base
+│   ├── FAQ-General-*.md   # General FAQs (EN/ZH/ES/FR)
+│   ├── FAQ-Appliances-*.md
+│   ├── FAQ-Clothing-*.md
+│   ├── FAQ-Electronics-*.md
+│   ├── FAQ-Furniture-*.md
+│   ├── FAQ-Headphones-*.md
+│   ├── FAQ-Kitchen-*.md
+│   ├── FAQ-SmartHome-EN.md
 │   ├── Refund-Policy.md
 │   ├── Exchange-Policy.md
-│   ├── Warranty-Terms.md
 │   ├── Shipping-Policy.md
 │   ├── Shipping-Rates.md
+│   ├── Warranty-Terms.md
 │   ├── Coupon-Policy.md
 │   ├── CodeSwitch-ENZH.md
 │   ├── CodeSwitch-FRES.md
@@ -245,9 +243,14 @@ aig230_final_project_g5/
 │
 ├── data/
 │   ├── chroma_db/         # Vector database
-│   └── testset.csv        # Test dataset (30 questions)
+│   ├── testset.csv        # Test dataset
+│   ├── eval_results.json  # Evaluation results
+│   └── eval_report.md     # Evaluation report
 │
-└── 10Proposal/            # Project proposal
+└── docs/
+    ├── proposals/         # Project proposals
+    ├── Final Report.md    # Final project report
+    └── Progress Report.md # Progress report
 ```
 
 ---
