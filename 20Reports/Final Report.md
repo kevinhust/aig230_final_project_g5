@@ -7,7 +7,7 @@
 | **Instructor** | Prof. David Quispe |
 | **Team** | Group 5 — Zhihuai Wang & Stephane Donald Njike Paho |
 | **Institution** | Seneca Polytechnic |
-| **Date** | April 6, 2026 |
+| **Date** | April 7, 2026 |
 
 ---
 
@@ -128,7 +128,7 @@ In addition to the Amazon-generated FAQs, we maintain **16 hand-crafted document
 - **Bilingual and trilingual content** — many FAQ entries are written in parallel across 2–4 languages
 - **Code-switching examples** — dedicated documents with realistic mixed-language queries and their answers (e.g., *"我的washer不drain，怎么fix？"*)
 - **Real customer voices** — Amazon-sourced FAQs contain authentic complaint language for 4 languages
-- **Total chunk count after splitting:** ~40 documents → text chunks (500 chars, 50 overlap) for vector store retrieval
+- **Total chunk count after splitting:** ~40 documents → ~522 text chunks (500 chars, 50 overlap) for vector store retrieval
 
 ### 3.2 Evaluation Test Set
 
@@ -238,7 +238,7 @@ The entire system operates without any model fine-tuning, relying on:
 │  ┌──────────────────────────────────────────┐│                   │
 │  │  RETRIEVAL (ChromaDB + bge-m3)          ││                   │
 │  │  - similarity_search (k=3)              ││                   │
-│  │  - 40 KB docs → ~120 chunks             ││                   │
+│  │  - 40 KB docs → ~522 chunks            ││                   │
 │  └─────────────────┬────────────────────────┘│                   │
 │                    │                          │                   │
 │                    ▼                          │                   │
@@ -338,7 +338,7 @@ aig230_final_project_g5/
 
 ### 6.2 Key Code Components
 
-**RAG Pipeline (`src/rag_pipeline.py` — 389 lines)**
+**RAG Pipeline (`src/rag_pipeline.py` — 355 lines)**
 
 The core `RAGEngine` class implements the full pipeline:
 - `__init__()`: Initializes embeddings (bge-m3), loads ChromaDB, and selects the best available LLM (ZhipuAI → HuggingFace → Ollama → Mock)
@@ -348,7 +348,7 @@ The core `RAGEngine` class implements the full pipeline:
 
 Language detection uses `langdetect` with a mapping table for 12 languages. Code-switching detection checks for co-occurring CJK and Latin characters in the same query string.
 
-**Sentiment Analysis (`src/sentiment.py` — 258 lines)**
+**Sentiment Analysis (`src/sentiment.py` — 302 lines)**
 
 A standalone module with both functional and class-based APIs:
 - `analyze_sentiment(query)`: Returns score (−1 to +1), anger flag, escalation flag, and detected signals
@@ -364,7 +364,7 @@ Builds the ChromaDB vector store from KB markdown files:
 - Embeds with BAAI/bge-m3 on CPU
 - Persists to `data/chroma_db/`
 
-**Amazon KB Generator (`src/gen_amazon_kb.py` — 275 lines)**
+**Amazon KB Generator (`src/gen_amazon_kb.py` — 274 lines)**
 
 Downloads and processes the Amazon Reviews Multi dataset into FAQ documents:
 - Downloads `mteb/amazon_reviews_multi` from HuggingFace
@@ -381,7 +381,7 @@ Automated evaluation system:
 - Compares against baseline metrics (pure LLM without RAG)
 - Generates JSON results + Markdown report
 
-**FastAPI Backend (`api.py` — 201 lines)**
+**FastAPI Backend (`api.py` — 200 lines)**
 
 6 REST endpoints:
 
@@ -394,7 +394,7 @@ Automated evaluation system:
 | GET | `/languages` | Supported languages + features |
 | POST | `/clear-memory` | Reset conversation |
 
-**Gradio Frontend (`app.py` — 178 lines)**
+**Gradio Frontend (`app.py` — 177 lines)**
 
 Web interface with:
 - ChatInterface with example queries in all supported languages
@@ -416,7 +416,7 @@ Evaluation was conducted on the full 30-question test set in mock mode (template
 | **Source Citation Rate** | 96.67% | 55.00% | **+41.67%** |
 | **Language Detection** | 100.00% | N/A | — |
 | **Sentiment Analysis** | 100.00% | N/A | — |
-| **Inline Citations** | 90.00% | 75.00% | **+15.00%** |
+| **Inline Citations** | 83.33% | 75.00% | **+8.33%** |
 
 ### 7.2 Performance by Category
 
@@ -439,15 +439,15 @@ Evaluation was conducted on the full 30-question test set in mock mode (template
 | en | 3 | 100.00% |
 | fr | 1 | 100.00% |
 | es | 1 | 100.00% |
-| zh | 3 | 100.00% |
+| zh | 3 | 66.67% |
 | es-en | 3 | 100.00% |
 | fr-en | 1 | 100.00% |
-| es-fr | 2 | 100.00% |
+| es-fr | 2 | 50.00% |
 | fr-es | 1 | 100.00% |
 | fr-es-en | 1 | 100.00% |
 | en-es | 1 | 100.00% |
 
-100% detection rate across all 10 language combinations. The `langdetect` library successfully identified the primary language of every query, including code-switched ones.
+**Note:** Pure language detection (single-language queries) achieves 100% for en, fr, es, and zh. The lower rates for `zh` (66.67%) and `es-fr` (50.00%) are caused by queries that contain mixed-language text being misclassified by `langdetect` — e.g., "有student discount吗？我是学生" (zh+en) was labeled as pure `zh` in the testset, and "Mi pedido no ha llegado, où est mon colis?" (es+fr) confuses `langdetect` with two Romance languages. These are inherent limitations of `langdetect` for code-switched input, not bugs in our pipeline.
 
 ### 7.4 Sentiment Analysis Results
 
@@ -523,6 +523,7 @@ As per AIG230 course requirements, we declare the following GenAI usage:
 | Component | AI Contribution | Human Contribution |
 |-----------|:-:|:-:|
 | KB Documents (kb/*.md) | Grammar check | Content writing, Q&A design, multilingual translation |
+| Amazon KB Generator (src/gen_amazon_kb.py) | Code generation | Pipeline design, category/keyword curation, filtering criteria |
 | RAG Pipeline (src/rag_pipeline.py) | Debugging assistance | Architecture design, logic implementation |
 | Sentiment Module (src/sentiment.py) | None | 100% human-written |
 | Gradio UI (app.py) | Initial template | Customization, styling, example curation |

@@ -69,7 +69,7 @@ def detect_primary_lang(query):
     try:
         lang = detect(query)
         mapping = {
-            'zh-cn': '中文', 'zh-tw': '中文', 'ko': 'Korean',
+            'zh': '中文', 'ko': 'Korean',
             'ja': 'Japanese', 'en': 'English', 'fr': 'Français',
             'es': 'Español', 'de': 'Deutsch', 'it': 'Italiano',
             'pt': 'Português', 'ru': 'Russian', 'ar': 'Arabic'

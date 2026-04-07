@@ -4,7 +4,7 @@
     "source_citation_rate": 0.9666666666666667,
     "language_detection_rate": 1.0,
     "sentiment_analysis_rate": 1.0,
-    "inline_citation_rate": 0.9
+    "inline_citation_rate": 0.8333333333333334
   },
   "baseline": {
     "answer_relevancy": 0.62,
@@ -27,10 +27,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-ENZH.md",
-        "kb/FAQ-Appliances.md"
+        "kb/FAQ-Appliances.md",
+        "kb/CodeSwitch-ENZH.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Appliances.md, kb/CodeSwitch-ENZH.md]..."
     },
     {
       "question": "How do I request a return for my broken washer?",
@@ -42,11 +42,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/FAQ-Furniture.md",
         "kb/CodeSwitch-ENZH.md",
+        "kb/FAQ-Furniture.md",
         "kb/Refund-Policy.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Furniture.md, kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Furniture.md, kb/Refund-Policy.md]..."
     },
     {
       "question": "Mon téléphone ne s'allume pas, que faire ?",
@@ -58,11 +58,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-FRES.md",
-        "kb/FAQ-Electronics.md",
-        "kb/FAQ-Laptops.md"
+        "kb/FAQ-Laptops.md",
+        "kb/CodeSwitch-FRES.md"
       ],
-      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.m..."
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/FAQ-Laptops.md, kb/CodeSwitch-FRES.md]..."
     },
     {
       "question": "¿Cómo solicito una devolución de mi smartphone?",
@@ -74,11 +73,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/FAQ-Electronics.md",
         "kb/CodeSwitch-ENZH.md",
         "kb/Refund-Policy.md"
       ],
-      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Electronics.md, kb/CodeSwitch-ENZH.md, kb/..."
+      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]..."
     },
     {
       "question": "Do you ship to Toronto?",
@@ -98,7 +96,7 @@
     {
       "question": "你们支持发货到多伦多吗？",
       "expected_lang": "zh",
-      "detected_lang": "English",
+      "detected_lang": "中文",
       "category": "shipping",
       "expected_sentiment": "neutral",
       "is_angry": false,
@@ -108,7 +106,7 @@
         "kb/Shipping-Policy.md",
         "kb/Shipping-Rates.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Shipping-Policy.md, kb/Shipping-Rates.md]..."
+      "answer_preview": "根据我们的知识库，我找到了与您查询相关的信息。请参阅我们的政策了解详情。[来源: kb/Shipping-Policy.md, kb/Shipping-Rates.md]..."
     },
     {
       "question": "我的laptop screen flickering，warranty能cover吗？",
@@ -135,10 +133,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
+        "kb/FAQ-Electronics-EN.md",
         "kb/CodeSwitch-ENZH.md",
         "kb/Customer-Complaints.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Electronics-EN.md, kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
     },
     {
       "question": "Fridge no enfriando, warranty?",
@@ -150,11 +149,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
+        "kb/FAQ-Appliances.md",
         "kb/FAQ-Kitchen.md",
-        "kb/CodeSwitch-ENZH.md",
-        "kb/FAQ-Appliances.md"
+        "kb/FAQ-Appliances-ES.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Kitchen.md, kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Appliances.md, kb/FAQ-Kitchen.md, kb/FAQ-Appliances-ES.md]..."
     },
     {
       "question": "我的phone screen cracked，能修吗？warranty cover吗？",
@@ -166,10 +165,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/Warranty-Terms.md",
-        "kb/CodeSwitch-ENZH.md"
+        "kb/CodeSwitch-ENZH.md",
+        "kb/Warranty-Terms.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Warranty-Terms.md, kb/CodeSwitch-ENZH.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Warranty-Terms.md]..."
     },
     {
       "question": "This is UNACCEPTABLE! I've been waiting 2 weeks!!!",
@@ -188,7 +187,7 @@
     {
       "question": "太离谱了！等了两个星期还没收到！！！",
       "expected_lang": "zh",
-      "detected_lang": "English",
+      "detected_lang": "中文",
       "category": "escalation",
       "expected_sentiment": "angry",
       "is_angry": false,
@@ -197,7 +196,7 @@
       "sources": [
         "kb/Customer-Complaints.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Customer-Complaints.md]..."
+      "answer_preview": "根据我们的知识库，我找到了与您查询相关的信息。请参阅我们的政策了解详情。[来源: kb/Customer-Complaints.md]..."
     },
     {
       "question": "C'est terrible! Worst service ever! Je veux my money back!!!",
@@ -221,10 +220,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-ENZH.md",
-        "kb/FAQ-Appliances.md"
+        "kb/FAQ-Appliances.md",
+        "kb/CodeSwitch-ENZH.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Appliances.md, kb/CodeSwitch-ENZH.md]..."
     },
     {
       "question": "Microwave不heat了，怎么办？",
@@ -251,9 +250,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
+        "kb/FAQ-SmartHome-EN.md",
         "kb/FAQ-Headphones.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Headphones.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-SmartHome-EN.md, kb/FAQ-Headphones.md]..."
     },
     {
       "question": "Laptop battery die很快，能replace吗？under warranty?",
@@ -294,10 +294,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/FAQ-Laptops.md",
+        "kb/FAQ-Electronics-ES.md",
+        "kb/FAQ-Electronics-FR.md",
         "kb/FAQ-Headphones.md"
       ],
-      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Laptops.md, kb/FAQ-Headphones.md]..."
+      "answer_preview": "Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Electronics-ES.md, kb/FAQ-Electronics-FR.m..."
     },
     {
       "question": "有student discount吗？我是学生",
@@ -340,9 +341,9 @@
       "has_sources": true,
       "sources": [
         "kb/Exchange-Policy.md",
-        "kb/CodeSwitch-ENZH.md"
+        "kb/FAQ-Clothing-ZH.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Exchange-Policy.md, kb/CodeSwitch-ENZH.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/Exchange-Policy.md, kb/FAQ-Clothing-ZH.md]..."
     },
     {
       "question": "收到的item damaged了，想return，怎么弄？",
@@ -369,10 +370,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
+        "kb/FAQ-General-EN.md",
         "kb/CodeSwitch-ENZH.md",
         "kb/Customer-Complaints.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-General-EN.md, kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
     },
     {
       "question": "Mi pedido no ha llegado, où est mon colis?",
@@ -384,10 +386,10 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-ENZH.md",
-        "kb/Customer-Complaints.md"
+        "kb/FAQ-SmartHome-EN.md",
+        "kb/FAQ-General-FR.md"
       ],
-      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/Customer-Complaints.md]..."
+      "answer_preview": "Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-SmartHome-EN.md, kb/FAQ-General-FR.md]..."
     },
     {
       "question": "Article endommagé, quiero refund, comment faire?",
@@ -414,10 +416,11 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-FRES.md",
-        "kb/FAQ-Headphones.md"
+        "kb/FAQ-Appliances-FR.md",
+        "kb/FAQ-Headphones.md",
+        "kb/CodeSwitch-FRES.md"
       ],
-      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Headphones.md..."
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/FAQ-Appliances-FR.md, kb/FAQ-Headphones...."
     },
     {
       "question": "我想exchange这个shirt to a bigger size，怎么操作？",
@@ -457,13 +460,12 @@
       "escalated": false,
       "has_sources": true,
       "sources": [
-        "kb/CodeSwitch-FRES.md",
-        "kb/FAQ-Electronics.md",
-        "kb/FAQ-Laptops.md"
+        "kb/FAQ-Laptops.md",
+        "kb/CodeSwitch-FRES.md"
       ],
-      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.m..."
+      "answer_preview": "Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/FAQ-Laptops.md, kb/CodeSwitch-FRES.md]..."
     }
   ],
   "total_questions": 30,
-  "timestamp": "2026-03-01T19:15:16.098294"
+  "timestamp": "2026-04-07T14:58:09.676035"
 }

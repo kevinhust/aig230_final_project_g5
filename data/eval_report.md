@@ -1,6 +1,6 @@
 # RAG Evaluation Report
 
-Generated: 2026-03-01T19:15:16.098294
+Generated: 2026-04-07T14:58:09.676035
 Total Questions: 30
 
 ---
@@ -13,7 +13,7 @@ Total Questions: 30
 | Source Citation | 96.67% | 55.00% | +41.67% |
 | Language Detection | 100.00% | N/A | - |
 | Sentiment Analysis | 100.00% | N/A | - |
-| Inline Citations | 90.00% | 75.00% | - |
+| Inline Citations | 83.33% | 75.00% | - |
 
 ---
 
@@ -38,10 +38,10 @@ Total Questions: 30
 | en | 3 | 100.00% |
 | fr | 1 | 100.00% |
 | es | 1 | 100.00% |
-| zh | 3 | 100.00% |
+| zh | 3 | 66.67% |
 | es-en | 3 | 100.00% |
 | fr-en | 1 | 100.00% |
-| es-fr | 2 | 100.00% |
+| es-fr | 2 | 50.00% |
 | fr-es | 1 | 100.00% |
 | fr-es-en | 1 | 100.00% |
 | en-es | 1 | 100.00% |
@@ -63,9 +63,9 @@ Total Questions: 30
 
 **Detected Language:** English
 
-**Sources:** kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md
+**Sources:** kb/FAQ-Appliances.md, kb/CodeSwitch-ENZH.md
 
-**Answer Preview:** Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Appliances.md]...
+**Answer Preview:** Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Appliances.md, kb/CodeSwitch-ENZH.md]...
 
 ---
 
@@ -75,9 +75,9 @@ Total Questions: 30
 
 **Detected Language:** English
 
-**Sources:** kb/FAQ-Furniture.md, kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md
+**Sources:** kb/CodeSwitch-ENZH.md, kb/FAQ-Furniture.md, kb/Refund-Policy.md
 
-**Answer Preview:** Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/FAQ-Furniture.md, kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]...
+**Answer Preview:** Based on our knowledge base, I found information related to your query. Please refer to our policies for details. [Source: kb/CodeSwitch-ENZH.md, kb/FAQ-Furniture.md, kb/Refund-Policy.md]...
 
 ---
 
@@ -87,9 +87,9 @@ Total Questions: 30
 
 **Detected Language:** Français
 
-**Sources:** kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.md, kb/FAQ-Laptops.md
+**Sources:** kb/FAQ-Laptops.md, kb/CodeSwitch-FRES.md
 
-**Answer Preview:** Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/CodeSwitch-FRES.md, kb/FAQ-Electronics.m...
+**Answer Preview:** Selon notre base de connaissances, j'ai trouvé des informations liées à votre demande. Veuillez vous référer à nos politiques pour plus de détails. [Source: kb/FAQ-Laptops.md, kb/CodeSwitch-FRES.md]...
 
 ---
 
@@ -99,9 +99,9 @@ Total Questions: 30
 
 **Detected Language:** Español
 
-**Sources:** kb/FAQ-Electronics.md, kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md
+**Sources:** kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md
 
-**Answer Preview:** Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/FAQ-Electronics.md, kb/CodeSwitch-ENZH.md, kb/...
+**Answer Preview:** Según nuestra base de conocimientos, encontré información relacionada con su consulta. Consulte nuestras políticas para obtener más detalles. [Fuente: kb/CodeSwitch-ENZH.md, kb/Refund-Policy.md]...
 
 ---
 
