@@ -212,15 +212,20 @@ Total Questions: {eval_results["total_questions"]}
 
     report += "\n---\n\n## Language Detection Accuracy\n\n"
 
-    # Group by language
+    # Group by language — check actual detection accuracy
+    lang_name_to_code = {
+        'English': 'en', '中文': 'zh', 'Français': 'fr', 'Español': 'es',
+    }
     languages = {}
     for r in results:
         lang = r['expected_lang']
         if lang not in languages:
             languages[lang] = {"total": 0, "correct": 0}
         languages[lang]["total"] += 1
-        # Consider it correct if detected lang matches expected
-        if r['detected_lang']:
+        detected = r['detected_lang']
+        detected_code = lang_name_to_code.get(detected, 'en')
+        expected_codes = lang.split('-')
+        if detected_code in expected_codes or detected in lang:
             languages[lang]["correct"] += 1
 
     report += "| Language | Questions | Detection Rate |\n"

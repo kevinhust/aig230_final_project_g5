@@ -43,6 +43,12 @@ from langdetect import detect
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
+# Import dedicated sentiment module
+try:
+    from sentiment import analyze_sentiment as _analyze_sentiment, get_escalation_response as _get_escalation_response
+except ImportError:
+    from src.sentiment import analyze_sentiment as _analyze_sentiment, get_escalation_response as _get_escalation_response
+
 # Configuration
 CHROMA_PATH = "data/chroma_db"
 EMBEDDING_MODEL = "BAAI/bge-m3"
@@ -58,6 +64,8 @@ SENTIMENT_ANGRY_THRESHOLD = -0.3
 
 def detect_primary_lang(query):
     """Detect the primary language of the query."""
+    if not query or len(query.strip()) < 3:
+        return 'English'
     try:
         lang = detect(query)
         mapping = {
@@ -82,60 +90,14 @@ def detect_code_switching(query):
 
 
 def simple_sentiment_analysis(query):
-    """Simple rule-based sentiment analysis."""
-    angry_keywords = {
-        'en': ['unacceptable', 'terrible', 'worst', 'scam', 'lawsuit', 'manager',
-               'ridiculous', 'awful', 'hate', 'disgusting', 'furious', 'angry'],
-        'zh': ['离谱', '骗子', '投诉', '报警', '差评', '垃圾', '退货', '退款', '不可接受'],
-        'fr': ['inacceptable', 'terrible', 'pire', 'arnaque', 'colère'],
-        'es': ['inaceptable', 'terrible', 'peor', 'estafa', 'denuncia']
-    }
-
-    escalation_keywords = {
-        'en': ['speak to manager', 'lawsuit', 'bbb', 'social media', 'lawyer'],
-        'zh': ['经理', '报警', '律师', '曝光'],
-        'fr': ['parler au responsable', 'avocat'],
-        'es': ['hablar con el gerente', 'abogado']
-    }
-
-    query_lower = query.lower()
-
-    angry_count = 0
-    for lang_keywords in angry_keywords.values():
-        for keyword in lang_keywords:
-            if keyword.lower() in query_lower:
-                angry_count += 1
-
-    escalation = False
-    for lang_keywords in escalation_keywords.values():
-        for keyword in lang_keywords:
-            if keyword.lower() in query_lower:
-                escalation = True
-                break
-
-    exclamation_count = query.count('!')
-    caps_ratio = sum(1 for c in query if c.isupper()) / max(len(query), 1)
-
-    sentiment_score = 0.0
-    sentiment_score -= angry_count * 0.2
-    sentiment_score -= min(exclamation_count * 0.05, 0.3)
-    sentiment_score -= min(caps_ratio * 0.5, 0.3)
-
-    is_angry = sentiment_score < SENTIMENT_ANGRY_THRESHOLD
-    escalation_needed = escalation or sentiment_score < -0.6
-
-    return sentiment_score, is_angry, escalation_needed
+    """Rule-based sentiment analysis using the dedicated sentiment module."""
+    result = _analyze_sentiment(query)
+    return result['score'], result['is_angry'], result['escalation_needed']
 
 
 def get_escalation_response(lang):
     """Get appropriate escalation response based on language."""
-    responses = {
-        'English': "I understand your frustration and want to make this right immediately. I'm connecting you to our senior support team who can better assist with this issue. Please hold briefly.",
-        '中文': "我完全理解您的不满，我们会立即处理这个问题。我将为您转接高级客服团队，他们能更好地帮助您。请稍等。",
-        'Français': "Je comprends votre frustration et je veux régler cela immédiatement. Je vous connecte à notre équipe senior qui pourra mieux vous aider. Veuillez patienter.",
-        'Español': "Entiendo su frustración y quiero solucionar esto inmediatamente. Lo conectaré con nuestro equipo senior que podrá ayudarlo mejor. Por favor espere."
-    }
-    return responses.get(lang, responses['English'])
+    return _get_escalation_response(lang)
 
 
 def format_docs(docs):
@@ -162,7 +124,7 @@ class RAGEngine:
     def __init__(self, use_ollama=False, use_mock=False, similarity_threshold=0.3):
         print(f"Initializing RAG Engine (embeddings: {EMBEDDING_MODEL})...")
         self.similarity_threshold = similarity_threshold
-        self.chat_history = []
+        self.chat_history = {}  # session_id -> list of messages
 
         # Determine mode: prefer ZhipuAI > HuggingFace > Ollama > Mock
         self.use_mock = use_mock
@@ -245,7 +207,7 @@ class RAGEngine:
         docs_with_scores = self.vectorstore.similarity_search_with_score(query, k=k)
         return [(doc, score) for doc, score in docs_with_scores]
 
-    def ask(self, query, include_scores=False):
+    def ask(self, query, include_scores=False, session_id="default"):
         """
         Process a query and return response with metadata.
         """
@@ -324,9 +286,11 @@ Context:
             }
             answer = apology_prefix.get(primary_lang, apology_prefix['English']) + answer
 
-        # Store in history
-        self.chat_history.append({"role": "user", "content": query})
-        self.chat_history.append({"role": "assistant", "content": answer})
+        # Store in session history
+        if session_id not in self.chat_history:
+            self.chat_history[session_id] = []
+        self.chat_history[session_id].append({"role": "user", "content": query})
+        self.chat_history[session_id].append({"role": "assistant", "content": answer})
 
         response = {
             "answer": answer,
@@ -346,14 +310,17 @@ Context:
 
         return response
 
-    def clear_memory(self):
-        """Clear conversation memory."""
-        self.chat_history = []
-        print("Conversation memory cleared.")
+    def clear_memory(self, session_id="default"):
+        """Clear conversation memory for a session."""
+        if session_id in self.chat_history:
+            del self.chat_history[session_id]
+            print(f"Conversation memory cleared for session: {session_id}")
+        else:
+            print("No session memory to clear.")
 
-    def get_memory_history(self):
-        """Get the current conversation history."""
-        return self.chat_history
+    def get_memory_history(self, session_id="default"):
+        """Get the current conversation history for a session."""
+        return self.chat_history.get(session_id, [])
 
 
 if __name__ == "__main__":

@@ -32,8 +32,8 @@ ANGRY_KEYWORDS = {
     ],
     'es': [
         'inaceptable', 'terrible', 'peor', 'estafa', 'denuncia',
-        'horrible', 'decepcionado', 'basura', ' vergonzoso',
-        'nunca más', 'fraude', ' indignado'
+        'horrible', 'decepcionado', 'basura', 'vergonzoso',
+        'nunca más', 'fraude', 'indignado'
     ]
 }
 
@@ -159,10 +159,10 @@ def analyze_sentiment(query: str) -> Dict:
     sentiment_score -= repeated_punct * 0.1
 
     # Determine anger level
-    is_angry = sentiment_score < SENTIMENT_ANGRY_THRESHOLD
+    is_angry = sentiment_score <= SENTIMENT_ANGRY_THRESHOLD
     escalation_needed = (
         len(escalation_signals) > 0 or
-        sentiment_score < SENTIMENT_ESCALATION_THRESHOLD
+        sentiment_score <= SENTIMENT_ESCALATION_THRESHOLD
     )
 
     return {
@@ -215,8 +215,53 @@ class SentimentAnalyzer:
         self.escalation_threshold = escalation_threshold
 
     def analyze(self, query: str) -> Dict:
-        """Analyze sentiment of a query."""
-        return analyze_sentiment(query)
+        """Analyze sentiment of a query using instance thresholds."""
+        query_lower = query.lower()
+
+        # Detect angry keywords
+        angry_signals = []
+        for lang, keywords in ANGRY_KEYWORDS.items():
+            for keyword in keywords:
+                if keyword.lower() in query_lower:
+                    angry_signals.append(keyword)
+
+        # Detect escalation keywords
+        escalation_signals = []
+        for lang, keywords in ESCALATION_KEYWORDS.items():
+            for keyword in keywords:
+                if keyword.lower() in query_lower:
+                    escalation_signals.append(keyword)
+
+        # Calculate sentiment score
+        sentiment_score = 0.0
+        sentiment_score -= len(angry_signals) * 0.15
+        exclamation_count = query.count('!')
+        question_marks = query.count('?')
+        sentiment_score -= min(exclamation_count * 0.05, 0.2)
+        sentiment_score -= min(question_marks * 0.02, 0.1)
+
+        if len(query) > 0:
+            caps_ratio = sum(1 for c in query if c.isupper()) / len(query)
+            if caps_ratio > 0.3:
+                sentiment_score -= min(caps_ratio * 0.5, 0.3)
+
+        repeated_punct = len(re.findall(r'[!?]{2,}', query))
+        sentiment_score -= repeated_punct * 0.1
+
+        # Use instance thresholds
+        is_angry = sentiment_score < self.angry_threshold
+        escalation_needed = (
+            len(escalation_signals) > 0 or
+            sentiment_score < self.escalation_threshold
+        )
+
+        return {
+            "score": round(sentiment_score, 2),
+            "is_angry": is_angry,
+            "escalation_needed": escalation_needed,
+            "angry_signals": angry_signals[:5],
+            "escalation_signals": escalation_signals[:3]
+        }
 
     def should_escalate(self, query: str) -> bool:
         """Quick check if query needs escalation."""

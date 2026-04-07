@@ -113,7 +113,7 @@ custom_css = """
 """
 
 # Define Gradio Interface
-with gr.Blocks(css=custom_css, theme=gr.themes.Soft()) as demo:
+with gr.Blocks() as demo:
     gr.Markdown("""
     # 🛒 Multilingual E-Commerce Customer Support
     ### Ask about shipping, returns, warranty, or product troubleshooting
@@ -174,4 +174,4 @@ with gr.Blocks(css=custom_css, theme=gr.themes.Soft()) as demo:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(css=custom_css, theme=gr.themes.Soft())
