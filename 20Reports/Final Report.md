@@ -13,7 +13,7 @@
 
 ## 1. Problem
 
-If you live in a city like Toronto, you've probably heard people switch languages mid-sentence all the time — something like *"我的 fridge 噪音大, warranty怎么走?"* or *"Article endommagé, quiero refund, comment faire?"*. This is called **code-switching**, and it's completely normal for bilingual and multilingual speakers. But most customer support chatbots can't handle it at all.
+If you live in a city like Toronto, you've probably heard people switch languages mid-sentence all the time — something like *"我的 fridge 噪音大 , warranty怎么走?"* or *"Article endommagé, quiero refund, comment faire?"*. This is called **code-switching**, and it's completely normal for bilingual and multilingual speakers. But most customer support chatbots can't handle it at all — or at least not very well in our experience.
 
 On platforms like Shopify and Amazon, when customers type queries in mixed languages, existing bots tend to do one of three things: return completely irrelevant answers because they can't parse the mixed input, make up policies (wrong return windows, incorrect shipping rates) since they don't have real data to ground their responses, or fail to pick up on customer frustration — leaving angry people stuck talking to a bot until they give up and demand a human agent.
 
@@ -32,7 +32,7 @@ To address these issues, we focused on a few practical goals. Instead of trying 
 | 3 | **Hallucination reduction** — always tell the user where the answer came from | <10% hallucination rate |
 | 4 | **Working web demo** — a chatbot anyone can try in a browser | Functional Gradio + FastAPI deployment |
 
-We also wanted the system to catch **angry or frustrated customers** and route them to a human agent instead of keeping them in a bot loop. These targets weren't fixed from the start — we adjusted them slightly as we iterated on the system.
+We also wanted the system to catch **angry or frustrated customers** and route them to a human agent instead of keeping them in a bot loop. These targets weren't fixed from the start — we adjusted them slightly as we iterated on the system and tested different setups.
 
 ---
 
@@ -44,7 +44,7 @@ The project uses a **hybrid knowledge base** of 40 Markdown documents — 16 tha
 
 #### 3.1.1 Amazon Reviews Multi Dataset
 
-We used the [mteb/amazon_reviews_multi](https://huggingface.co/datasets/mteb/amazon_reviews_multi) dataset to generate FAQ documents from real customer reviews. The dataset has product reviews in multiple languages across a range of categories.
+We used the [mteb/amazon_reviews_multi](https://huggingface.co/datasets/mteb/amazon_reviews_multi) dataset to generate FAQ documents from real customer reviews. The dataset contains product reviews in multiple languages across a range of categories.
 
 **Data filtering pipeline:**
 
@@ -176,7 +176,7 @@ Our approach was to build a **Retrieval-Augmented Generation (RAG) chatbot** —
 
 ### 4.1 Multilingual Retrieval with BGE-M3
 
-Instead of translating everything into English first, we decided to use **BAAI/bge-m3**, mainly because it already supports 100+ languages out of the box and simplifies the pipeline quite a bit. Both the KB documents and the user's query get turned into vectors in the same multilingual space. In practice, this means a Chinese query about something like a refrigerator warranty can still match Chinese, English, or even mixed-language KB entries without needing an extra translation step.
+Instead of translating everything into English first, we decided to use **BAAI/bge-m3**, mainly because it already supports 100+ languages out of the box and simplifies the pipeline quite a bit. Both the KB documents and the user's query are converted into vectors in the same multilingual space. In practice, this means a Chinese query about something like a refrigerator warranty can still match Chinese, English, or even mixed-language KB entries without needing an extra translation step.
 
 ### 4.2 Code-Switching Detection
 
@@ -333,7 +333,7 @@ aig230_final_project_g5/
 
 **RAG Pipeline (`src/rag_pipeline.py` — 355 lines)**
 
-The core `RAGEngine` class implements the full pipeline:
+The core `RAGEngine` class implements the full pipeline (at a high level):
 - `__init__()`: Initializes embeddings (bge-m3), loads ChromaDB, and selects the best available LLM (ZhipuAI → HuggingFace → Ollama → Mock)
 - `ask(query)`: Main method — detects language, checks sentiment, retrieves KB documents, generates response with LLM, appends apology prefix for angry customers
 - `retrieve_with_scores(query, k)`: Returns documents with similarity scores for debugging
@@ -401,7 +401,7 @@ Web interface with:
 
 ### 7.1 Overall Performance
 
-Before diving into the numbers, it's worth noting that these results were obtained under controlled conditions, so they should be interpreted with that in mind (this is still a relatively small test setup). We ran the evaluation on the full 30-question test set, mostly in mock mode (i.e., template-based answers but real retrieval from the 40-document KB):
+Before diving into the numbers, it's worth noting that these results were obtained under controlled conditions, so they should be interpreted with that in mind (this is still a relatively small test setup ). We ran the evaluation on the full 30-question test set, mostly in mock mode (i.e., template-based answers but real retrieval from the 40-document KB):
 
 | Metric | RAG System | Baseline (Pure LLM) | Improvement |
 |--------|:----------:|:-------------------:|:-----------:|
@@ -474,7 +474,7 @@ The retriever generally picks the right documents — for example, it pulls code
 |-----------|----------|
 | **Model size & memory** — bge-m3 is ~2.2GB, causing OOM on limited hardware | Used `device='cpu'` to avoid GPU memory allocation; CPU inference is acceptable for single-query RAG |
 | **Package compatibility** — `sentence-transformers` and `huggingface_hub` version conflicts | Upgraded to `sentence-transformers` v5.1.2 for compatibility with the latest LangChain ecosystem |
-| **API access** — dependency on external LLM APIs for generation | Implemented 4-tier fallback: ZhipuAI → HuggingFace → Ollama → Mock mode, ensuring the system always functions |
+| **API access** — dependency on external LLM APIs for generation | Implemented 4-tier fallback: ZhipuAI → HuggingFace → Ollama → Mock mode, ensuring the system always functions, even if some external services fail |
 | **Code-switching detection** — standard language detectors classify mixed-language text as a single language | Custom CJK+Latin character detection to flag code-switching independently of `langdetect` output |
 | **Multilingual sentiment** — no single sentiment lexicon covers all 4 languages | Built custom keyword dictionaries per language with weighted scoring (anger keywords, escalation triggers, punctuation analysis) |
 | **CORS security** — `allow_origins=["*"]` + `allow_credentials=True` is rejected by browsers | Changed to `allow_credentials=False` for wildcard origins |
@@ -491,11 +491,11 @@ From our testing, it seems that a RAG pipeline with strong multilingual embeddin
 
 BGE-M3 turned out to be a pretty solid choice for multilingual retrieval, even though we weren't completely sure how well it would perform at the beginning. It was able to correctly match queries across around 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected, although this might also depend on the types of queries included in our test set; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
 
-Interestingly, code-switching actually didn't require any specialized model either. Our approach was pretty simple — we basically check for CJK and Latin characters in the same string, and then pull from the code-switching KB documents. Combined with the right prompt instructions, the system handled queries like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
+Interestingly, code-switching actually didn't require any specialized model either. Our approach was pretty simple — we basically check for CJK and Latin characters in the same string, and then pull from the code switching KB documents. And combined with the right prompt instructions, the system handled queris like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
 
-One clear improvement we saw was in hallucination — the RAG approach made a noticeable difference here. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system reached 100% answer coverage in this setup because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
+One clear improvement we saw was in hallucination (this was actually one of the main things we were worried about at the beginning) — the RAG approach made a noticeable difference here. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system reached 100% answer coverage in this setup because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
 
-For sentiment, the rule-based approach ended up being good enough for our use case, even though it's relatively simple. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model might be more accurate, but for our use case the keyword-based approach was sufficient and much easier to implement, so we decided to keep it simple.
+For sentiment, the rule-based approach ended up being good enough for our use case, even though it's relatively simple. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model would probably be more accurate, but for our use case the keyword-based approach was sufficient and much easier to implement, so we decided to keep it simple.
 
 One decision that turned out to be especially important was the fallback chain. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system could still return something useful even when certain services failed or weren't available. In practice, it degraded to mock mode during development, but the architecture is there for production use, although we didn't fully test it in a real production environment, so this part would probably need further validation in a real setting.
 
