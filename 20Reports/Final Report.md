@@ -13,30 +13,26 @@
 
 ## 1. Problem
 
-In today's multicultural e-commerce landscape — particularly in diverse cities like Toronto where residents regularly mix English, Chinese, French, Spanish, and other languages — customer support chatbots face a critical failure mode: **inability to handle multilingual and code-switched (mixed-language) queries**.
+If you live in a city like Toronto, you've probably heard people switch languages mid-sentence all the time — something like *"我的fridge噪音大，warranty怎么走？"* or *"Article endommagé, quiero refund, comment faire?"*. This is called **code-switching**, and it's completely normal for bilingual and multilingual speakers. But most customer support chatbots can't handle it at all.
 
-Every day on platforms like Shopify and Amazon, customers type queries such as *"我的fridge噪音大，warranty怎么走？"* (mixing Chinese and English) or *"Article endommagé, quiero refund, comment faire?"* (mixing French and Spanish). Existing bots either:
+On platforms like Shopify and Amazon, when customers type queries in mixed languages, existing bots tend to do one of three things: return completely irrelevant answers because they can't parse the mixed input, make up policies (wrong return windows, incorrect shipping rates) since they don't have real data to ground their responses, or fail to pick up on customer frustration — leaving angry people stuck talking to a bot until they give up and demand a human agent.
 
-1. **Fail to understand** mixed-language input, returning irrelevant answers.
-2. **Hallucinate** policies (wrong return windows, incorrect shipping rates) when they lack grounding in real company knowledge.
-3. **Cannot detect customer emotion**, leaving angry customers stuck in automated loops until they rage-quit — after re-explaining their issue to a human agent.
-
-This translates to **20–30% sales loss for small sellers** who rely on automated support, as frustrated customers abandon purchases, request chargebacks, or leave negative reviews. Current solutions treat multilingual support as an afterthought, and virtually none handle **code-switching** — the natural linguistic behavior of bilingual/multilingual speakers who alternate between languages mid-sentence.
+For small sellers who depend on automated support, this can mean losing 20–30% of sales when frustrated customers walk away, file chargebacks, or leave bad reviews. Most current solutions barely support multiple languages, let alone code-switching.
 
 ---
 
 ## 2. Objective
 
-Our project addresses these gaps with four measurable objectives:
+We set out to tackle these issues with four concrete goals:
 
 | # | Objective | Target |
 |---|-----------|--------|
-| 1 | **Answer relevance** — provide accurate, grounded answers to customer queries | 25%+ improvement over baseline (pure LLM) |
-| 2 | **Multilingual + Code-Switching** — support English, Chinese, French, Spanish, and mixed-language queries | 4 languages + code-switching detection |
-| 3 | **Hallucination reduction** — always cite knowledge-base sources | <10% hallucination rate |
-| 4 | **Real-time web demo** — deploy an interactive chatbot accessible via browser | Functional Gradio + FastAPI deployment |
+| 1 | **Answer relevance** — give accurate answers that are grounded in real KB documents | 25%+ improvement over baseline (pure LLM, no retrieval) |
+| 2 | **Multilingual + Code-Switching** — handle English, Chinese, French, Spanish, and mixed-language input | 4 languages + code-switching detection |
+| 3 | **Hallucination reduction** — always tell the user where the answer came from | <10% hallucination rate |
+| 4 | **Working web demo** — a chatbot anyone can try in a browser | Functional Gradio + FastAPI deployment |
 
-Additionally, the system should detect **angry/frustrated customers** and escalate them to human support, avoiding the "stuck in bot loop" problem.
+We also wanted the system to catch **angry or frustrated customers** and route them to a human agent instead of keeping them in a bot loop.
 
 ---
 
@@ -44,11 +40,11 @@ Additionally, the system should detect **angry/frustrated customers** and escala
 
 ### 3.1 Knowledge Base (KB)
 
-The project uses a **hybrid knowledge base** of 40 Markdown documents combining hand-crafted expert content with real customer complaint data from the **Amazon Reviews Multi** dataset (`mteb/amazon_reviews_multi` on HuggingFace).
+The project uses a **hybrid knowledge base** of 40 Markdown documents — 16 that we wrote by hand (troubleshooting guides, store policies, code-switching examples) and 24 that were generated from real customer complaint data in the **Amazon Reviews Multi** dataset (`mteb/amazon_reviews_multi` on HuggingFace).
 
 #### 3.1.1 Amazon Reviews Multi Dataset
 
-We used the [mteb/amazon_reviews_multi](https://huggingface.co/datasets/mteb/amazon_reviews_multi) dataset as our primary data source for generating FAQ documents. The dataset contains multilingual product reviews across multiple categories.
+We used the [mteb/amazon_reviews_multi](https://huggingface.co/datasets/mteb/amazon_reviews_multi) dataset to generate FAQ documents from real customer reviews. The dataset has product reviews in multiple languages across a range of categories.
 
 **Data filtering pipeline:**
 
@@ -82,7 +78,7 @@ The filtering and generation pipeline is implemented in `src/gen_amazon_kb.py`, 
 
 #### 3.1.2 Hand-Crafted KB Documents
 
-In addition to the Amazon-generated FAQs, we maintain **16 hand-crafted documents** containing structured troubleshooting steps, store policies, and code-switching guides that cannot be derived from customer reviews:
+Besides the Amazon-generated FAQs, we wrote **16 documents by hand** with structured troubleshooting steps, store policies, and code-switching examples — things you can't really get from customer reviews:
 
 **Product FAQs (7 documents) — structured troubleshooting guides:**
 
@@ -132,7 +128,7 @@ In addition to the Amazon-generated FAQs, we maintain **16 hand-crafted document
 
 ### 3.2 Evaluation Test Set
 
-A hand-curated test dataset of **30 questions** (`data/testset.csv`) covering:
+We put together a test set of **30 questions** (`data/testset.csv`) by hand, trying to cover a realistic mix:
 
 **By language:**
 
@@ -167,48 +163,45 @@ A hand-curated test dataset of **30 questions** (`data/testset.csv`) covering:
 | Urgent | 1 |
 
 **EDA Observations:**
-- The test set is **heavily weighted toward code-switching** (zh-en represents 43% of queries), reflecting real usage patterns in multicultural markets
-- All 4 primary languages are represented, plus mixed-language combinations
-- Escalation/angry queries are included to test the sentiment pipeline under realistic high-stress scenarios
-- Each test question has a `ground_truth` column with the expected answer, enabling automated evaluation
+- The test set leans heavily toward code-switching (zh-en is 43% of queries), which is intentional — that's the main scenario we're targeting
+- All 4 languages show up at least once, plus mixed-language combos
+- We added a few angry/escalation queries to make sure the sentiment pipeline gets tested under stress
+- Each question has a `ground_truth` column so we can run automated evaluation
 
 ---
 
 ## 4. Solution
 
-We built a **Retrieval-Augmented Generation (RAG) chatbot** that addresses each problem dimension:
+Our approach was to build a **Retrieval-Augmented Generation (RAG) chatbot** — meaning the bot doesn't just rely on what the LLM knows, it first pulls relevant documents from a knowledge base and then uses those as context for generating a response.
 
 ### 4.1 Multilingual Retrieval with BGE-M3
 
-Rather than translating queries to a single language, we use **BAAI/bge-m3** — a state-of-the-art embedding model supporting **100+ languages** — to vectorize both the knowledge base and user queries in their original language. This ensures that a Chinese query about refrigerator warranty is matched against Chinese, English, or mixed-language KB entries about the same topic, purely through semantic similarity.
+Instead of translating everything to English first, we use **BAAI/bge-m3** — an embedding model that supports 100+ languages out of the box. Both the KB documents and the user's query get turned into vectors in the same multilingual space. So a Chinese query about refrigerator warranty can match against Chinese, English, or mixed-language KB entries about the same topic, purely based on semantic similarity. No translation step needed.
 
 ### 4.2 Code-Switching Detection
 
-A dedicated module detects when a query contains mixed scripts (e.g., CJK characters + Latin characters). This triggers retrieval from specialized code-switching KB documents that contain parallel bilingual answers. The system then instructs the LLM to respond naturally in the user's mixed language pattern.
+We wrote a separate module that checks whether a query has both CJK characters and Latin characters in the same string — that's our code-switching signal. When it fires, the retriever also pulls from dedicated code-switching KB documents that contain parallel bilingual answers. The LLM prompt then asks it to respond in whatever mix of languages the user was using.
 
 ### 4.3 Sentiment Analysis & Escalation
 
-A rule-based multilingual sentiment analyzer scans for angry keywords in 4 languages (EN, ZH, FR, ES), plus escalation triggers ("speak to manager", "报警", "avocat"). It computes a sentiment score from -1 (very angry) to 1 (neutral) based on:
+We went with a rule-based approach for sentiment rather than a neural model, mainly to keep things lightweight. The analyzer scans for angry keywords in all 4 languages (EN, ZH, FR, ES), plus specific escalation triggers like "speak to manager", "报警", or "avocat". It computes a sentiment score from -1 (very angry) to 1 (neutral) based on:
 - Angry keyword count (−0.15 to −0.2 per keyword)
 - Excessive punctuation (−0.05 per exclamation mark, capped at −0.3)
 - ALL CAPS ratio (−0.5 × ratio if >30% uppercase)
 
-If the score falls below −0.6 or escalation triggers are detected, the system **immediately returns an escalation response** in the user's language, bypassing the normal RAG pipeline.
+If the score drops below −0.6 or an escalation trigger is detected, the system skips the normal RAG pipeline entirely and returns an escalation response in the user's language.
 
 ### 4.4 RAG Pipeline with Source Citations
 
-Every response is grounded in retrieved KB documents. The system:
-1. Embeds the query using bge-m3
-2. Retrieves top-k (k=3) similar chunks from ChromaDB
-3. Passes context + query to the LLM with explicit instructions to cite sources using `[Source: filename]` format
-4. Returns the answer with metadata (sources, language, sentiment, escalation status)
+Every answer is based on retrieved KB documents. The pipeline works like this:
+1. The query gets embedded using bge-m3
+2. ChromaDB returns the top 3 most similar chunks
+3. Those chunks plus the query go to the LLM, with instructions to cite sources using `[Source: filename]` format
+4. The response includes the answer plus metadata — sources, detected language, sentiment score, whether it was escalated
 
 ### 4.5 No Fine-Tuning Required
 
-The entire system operates without any model fine-tuning, relying on:
-- Pre-trained multilingual embeddings (bge-m3)
-- In-context learning via carefully designed prompts
-- High-quality curated knowledge base
+We deliberately avoided any model fine-tuning. The whole system runs on pre-trained multilingual embeddings (bge-m3), in-context learning through the prompts we wrote, and the knowledge base documents we curated.
 
 ---
 
@@ -408,7 +401,7 @@ Web interface with:
 
 ### 7.1 Overall Performance
 
-Evaluation was conducted on the full 30-question test set in mock mode (template-based answers with real retrieval):
+We ran the evaluation on the full 30-question test set in mock mode (template-based answers, but real retrieval from the 40-document KB):
 
 | Metric | RAG System | Baseline (Pure LLM) | Improvement |
 |--------|:----------:|:-------------------:|:-----------:|
@@ -471,7 +464,7 @@ Evaluation was conducted on the full 30-question test set in mock mode (template
 | "我的laptop screen flickering，warranty能cover吗？" | FAQ-Laptops.md, Warranty-Terms.md |
 | "Coupon code不work，why？" | CodeSwitch-ENZH.md, Coupon-Policy.md |
 
-The retriever consistently selects the most relevant KB documents, including both the code-switching guides and the appropriate product/policy FAQ.
+The retriever generally picks the right documents — it pulls code-switching guides when the query has mixed languages, and the relevant product or policy FAQ otherwise.
 
 ---
 
@@ -494,31 +487,27 @@ The retriever consistently selects the most relevant KB documents, including bot
 
 ## 9. Conclusions
 
-This project demonstrates that a **well-designed RAG pipeline** with multilingual embeddings can effectively serve multicultural e-commerce customers without requiring expensive fine-tuning. Our key findings are:
+Overall, we found that a RAG pipeline with good multilingual embeddings can serve multilingual e-commerce customers pretty well, even without fine-tuning anything. Here's what we learned:
 
-1. **BGE-M3 embeddings are highly effective for multilingual retrieval.** The model successfully matched queries in 10 different language combinations to the correct KB documents, achieving 100% language detection and 96.67% source citation rate.
+BGE-M3 turned out to be a solid choice for multilingual retrieval. It correctly matched queries across 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
 
-2. **Code-switching is solvable without specialized models.** By combining a simple character-based detector with a curated code-switching knowledge base and prompt-engineered LLM responses, the system handles mixed-language queries like *"我的laptop screen flickering，warranty能cover吗？"* naturally.
+Code-switching didn't require any specialized model either. Our approach was pretty simple — just check for CJK and Latin characters in the same string, then pull from the code-switching KB documents. Combined with the right prompt instructions, the system handled queries like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
 
-3. **RAG dramatically reduces hallucination.** Compared to a baseline pure LLM (62% answer relevancy, 25% hallucination rate), the RAG system achieved 100% answer coverage with grounded, source-cited responses. This is a **+38% improvement in answer relevance** and **+41.67% improvement in source attribution**.
+The RAG approach made a big difference for hallucination. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system hit 100% answer coverage because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
 
-4. **Rule-based sentiment analysis is sufficient for escalation.** The multilingual keyword-based approach correctly identified angry customers in 2/3 cases with zero false positives, triggering appropriate escalation without the overhead of a neural sentiment model.
+For sentiment, the rule-based approach was good enough. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model might be more accurate, but for our use case the keyword-based approach did the job without the extra overhead.
 
-5. **Fallback architecture is critical for reliability.** The 4-tier LLM fallback chain (ZhipuAI → HuggingFace → Ollama → Mock) ensures the system remains functional even when APIs are unavailable, degrading gracefully from natural language responses to template-based answers.
+The fallback chain was probably the most important engineering decision we made. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system always returned something useful, even when APIs were down. In practice, it degraded to mock mode during development, but the architecture is there for production use.
 
 ### Limitations & Future Work
 
-- **Test set size:** The evaluation uses 30 questions. A larger, crowdsourced test set would provide more statistically significant results.
-- **LLM quality in mock mode:** Current evaluation runs in mock mode (template responses). With a live LLM (GLM-4.7), response quality would improve but introduces API latency and cost.
-- **Language detection for code-switching:** `langdetect` reports the *primary* language for mixed queries. A more sophisticated detector could identify all languages present.
-- **Real user testing:** The system has not been tested with real end-users. A/B testing against existing chatbots would validate the practical impact.
-- **Additional languages:** The KB currently covers EN, ZH, FR, ES. Extending to Arabic, Hindi, or Korean would increase coverage for global markets.
+There are a few things we'd improve given more time. The test set is only 30 questions, which is too small for strong statistical claims. We ran the evaluation in mock mode (template responses rather than real LLM output), so the results mainly reflect retrieval quality, not generation quality. Language detection with `langdetect` has trouble with code-switched text — it reports the *primary* language rather than identifying all languages present. We haven't tested with real end-users yet, and the KB only covers EN, ZH, FR, ES. Adding Arabic, Hindi, or Korean would make it more useful for a global audience.
 
 ---
 
 ## 10. GenAI Declaration
 
-As per AIG230 course requirements, we declare the following GenAI usage:
+As required by the AIG230 course, here's our GenAI usage breakdown:
 
 | Component | AI Contribution | Human Contribution |
 |-----------|:-:|:-:|
