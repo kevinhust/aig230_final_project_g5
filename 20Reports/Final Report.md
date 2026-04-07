@@ -180,7 +180,7 @@ Instead of translating everything into English first, we decided to use **BAAI/b
 
 ### 4.2 Code-Switching Detection
 
-We wrote a separate module that checks whether a query has both CJK characters and Latin characters in the same string — that's our code-switching signal. When it fires, the retriever also pulls from dedicated code-switching KB documents that contain parallel bilingual answers. The LLM prompt then asks it to respond in whatever mix of languages the user was using.
+We wrote a separate module that checks whether a query has both CJK characters and Latin characters in the same string, and we use that as a signal for code-switching. This approach is fairly simple, but it worked well enough for our needs. When this condition is triggered, the retriever also pulls from dedicated code-switching KB documents, which contain parallel bilingual answers. In practice, this helped improve retrieval for mixed-language queries. The LLM prompt then asks it to respond in whatever mix of languages the user was using.
 
 ### 4.3 Sentiment Analysis & Escalation
 
@@ -193,7 +193,7 @@ If the score drops below −0.6 or an escalation trigger is detected, the system
 
 ### 4.4 RAG Pipeline with Source Citations
 
-Every answer is based on retrieved KB documents. The pipeline works like this:
+Every answer is based on retrieved KB documents, although there may still be occasional mismatches depending on the query. The pipeline roughly works as follows, with some minor variations depending on the query:
 1. The query gets embedded using bge-m3
 2. ChromaDB returns the top 3 most similar chunks
 3. Those chunks plus the query go to the LLM, with instructions to cite sources using `[Source: filename]` format
@@ -422,7 +422,7 @@ Before diving into the numbers, it's worth noting that these results were obtain
 | Payment | 3 | 100.00% |
 | Escalation | 3 | 66.67% |
 
-**Note:** The escalation category shows 66.67% citation rate because escalated queries bypass the normal RAG retrieval pipeline — the system returns an immediate escalation response without looking up KB documents. This is by design: when a customer is extremely angry, the priority is rapid escalation, not information retrieval.
+**Note:** The escalation category shows 66.67% citation rate because escalated queries bypass the normal RAG retrieval pipeline — the system returns an immediate escalation response without looking up KB documents. This is by design: when a customer is extremely angry, the priority is rapid escalation, not information retrieval. This was something we decided early on during development.
 
 ### 7.3 Language Detection Accuracy
 
@@ -464,7 +464,7 @@ Before diving into the numbers, it's worth noting that these results were obtain
 | "我的laptop screen flickering，warranty能cover吗？" | FAQ-Laptops.md, Warranty-Terms.md |
 | "Coupon code不work，why？" | CodeSwitch-ENZH.md, Coupon-Policy.md |
 
-The retriever generally picks the right documents — it pulls code-switching guides when the query has mixed languages, and the relevant product or policy FAQ otherwise.
+The retriever generally picks the right documents — it pulls code-switching guides when the query has mixed languages, and the relevant product or policy FAQ otherwise, although we did notice a few minor mismatches during testing, especially with more complex mixed-language queries.
 
 ---
 
@@ -487,17 +487,17 @@ The retriever generally picks the right documents — it pulls code-switching gu
 
 ## 9. Conclusions
 
-From our testing, it seems that a RAG pipeline with strong multilingual embeddings can handle multilingual e-commerce queries reasonably well in practice, even without fine-tuning anything. Here's what we learned:
+From our testing, it seems that a RAG pipeline with strong multilingual embeddings can handle multilingual e-commerce queries reasonably well in practice, even without fine-tuning anything. That said, this observation is based on a relatively small test setup, so it may not generalize perfectly. Here's what we learned:
 
-BGE-M3 turned out to be a pretty solid choice for multilingual retrieval, even though we weren't completely sure how well it would perform at the beginning. It correctly matched queries across 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
+BGE-M3 turned out to be a pretty solid choice for multilingual retrieval, even though we weren't completely sure how well it would perform at the beginning. It correctly matched queries across 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected, although this might also depend on the types of queries included in our test set; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
 
 Interestingly, code-switching didn't require any specialized model either. Our approach was pretty simple — just check for CJK and Latin characters in the same string, then pull from the code-switching KB documents. Combined with the right prompt instructions, the system handled queries like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
 
 One clear improvement we saw was in hallucination — the RAG approach made a noticeable difference here. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system hit 100% answer coverage because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
 
-For sentiment, the rule-based approach ended up being good enough for our use case, even though it's relatively simple. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model might be more accurate, but for our use case the keyword-based approach did the job without the extra overhead.
+For sentiment, the rule-based approach ended up being good enough for our use case, even though it's relatively simple. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model might be more accurate, but for our use case the keyword-based approach was sufficient and much easier to implement, so we decided to keep it simple.
 
-One decision that turned out to be especially important was the fallback chain. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system could still return something useful even when certain services failed or weren't available. In practice, it degraded to mock mode during development, but the architecture is there for production use.
+One decision that turned out to be especially important was the fallback chain. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system could still return something useful even when certain services failed or weren't available. In practice, it degraded to mock mode during development, but the architecture is there for production use, although we didn't fully test it in a real production environment, so this part would need further validation.
 
 ### Limitations & Future Work
 
