@@ -13,7 +13,7 @@
 
 ## 1. Problem
 
-If you live in a city like Toronto, you've probably heard people switch languages mid-sentence all the time — something like *"我的fridge噪音大，warranty怎么走？"* or *"Article endommagé, quiero refund, comment faire?"*. This is called **code-switching**, and it's completely normal for bilingual and multilingual speakers. But most customer support chatbots can't handle it at all.
+If you live in a city like Toronto, you've probably heard people switch languages mid-sentence all the time — something like *"我的 fridge 噪音大, warranty怎么走?"* or *"Article endommagé, quiero refund, comment faire?"*. This is called **code-switching**, and it's completely normal for bilingual and multilingual speakers. But most customer support chatbots can't handle it at all.
 
 On platforms like Shopify and Amazon, when customers type queries in mixed languages, existing bots tend to do one of three things: return completely irrelevant answers because they can't parse the mixed input, make up policies (wrong return windows, incorrect shipping rates) since they don't have real data to ground their responses, or fail to pick up on customer frustration — leaving angry people stuck talking to a bot until they give up and demand a human agent.
 
@@ -186,14 +186,14 @@ We wrote a separate module that checks whether a query has both CJK characters a
 
 We ended up using a rule-based approach for sentiment instead of a neural model. The main reason was to keep things lightweight, especially since we didn't want to add another heavy dependency to the pipeline. The analyzer scans for angry keywords in all 4 languages (EN, ZH, FR, ES), plus specific escalation triggers like "speak to manager", "报警", or "avocat". It then computes a sentiment score ranging from -1 (very angry) to 1 (neutral), based on a combination of these signals:
 - Angry keyword count (−0.15 to −0.2 per keyword)
-- Excessive punctuation (−0.05 per exclamation mark, capped at −0.3)
+- Excessive punctuation (−0.05 per exclamation mark (capped at −0.3))
 - ALL CAPS ratio (−0.5 × ratio if >30% uppercase)
 
 If the score drops below −0.6 or an escalation trigger is detected, the system skips the normal RAG pipeline entirely and returns an escalation response in the user's language.
 
 ### 4.4 RAG Pipeline with Source Citations
 
-Every answer is based on retrieved KB documents, although there may still be occasional mismatches depending on the query. The pipeline roughly works as follows, with some minor variations depending on the query:
+Almost every answer is based on retrieved KB documents, although there may still be occasional mismatches depending on the query. The pipeline roughly works as follows, with some minor variations depending on the query:
 1. The query gets embedded using bge-m3
 2. ChromaDB returns the top 3 most similar chunks
 3. Those chunks plus the query go to the LLM, with instructions to cite sources using `[Source: filename]` format
@@ -401,7 +401,7 @@ Web interface with:
 
 ### 7.1 Overall Performance
 
-Before diving into the numbers, it's worth noting that these results were obtained under controlled conditions, so they should be interpreted with that in mind. We ran the evaluation on the full 30-question test set, mostly in mock mode (i.e., template-based answers but real retrieval from the 40-document KB):
+Before diving into the numbers, it's worth noting that these results were obtained under controlled conditions, so they should be interpreted with that in mind (this is still a relatively small test setup). We ran the evaluation on the full 30-question test set, mostly in mock mode (i.e., template-based answers but real retrieval from the 40-document KB):
 
 | Metric | RAG System | Baseline (Pure LLM) | Improvement |
 |--------|:----------:|:-------------------:|:-----------:|
@@ -440,7 +440,7 @@ Before diving into the numbers, it's worth noting that these results were obtain
 | fr-es-en | 1 | 100.00% |
 | en-es | 1 | 100.00% |
 
-**Note:** Pure language detection (single-language queries) achieves 100% for en, fr, es, and zh. The lower rates for `zh` (66.67%) and `es-fr` (50.00%) are caused by queries that contain mixed-language text being misclassified by `langdetect` — e.g., "有student discount吗？我是学生" (zh+en) was labeled as pure `zh` in the testset, and "Mi pedido no ha llegado, où est mon colis?" (es+fr) confuses `langdetect` with two Romance languages. These are inherent limitations of `langdetect` for code-switched input, not bugs in our pipeline.
+**Note:** Pure language detection (single-language queries) achieves 100% for en, fr, es, and zh. The lower rates for `zh` (66.67%) and `es-fr` (50.00%) are caused by queries that contain mixed-language text being misclassified by `langdetect` — e.g., "有student discount吗？我是学生" (zh+en) was labeled as pure `zh` in the testset, and "Mi pedido no ha llegado, où est mon colis?" (es+fr) confuses `langdetect` with two Romance languages. These are mostly limitations of `langdetect` for code-switched input, rather than actual bugs in our pipeline.
 
 ### 7.4 Sentiment Analysis Results
 
@@ -464,7 +464,7 @@ Before diving into the numbers, it's worth noting that these results were obtain
 | "我的laptop screen flickering，warranty能cover吗？" | FAQ-Laptops.md, Warranty-Terms.md |
 | "Coupon code不work，why？" | CodeSwitch-ENZH.md, Coupon-Policy.md |
 
-The retriever generally picks the right documents — it pulls code-switching guides when the query has mixed languages, and the relevant product or policy FAQ otherwise, although we did notice a few minor mismatches during testing, especially with more complex mixed-language queries.
+The retriever generally picks the right documents — for example, it pulls code-switching guides when the query has mixed languages, and the relevant product or policy FAQ otherwise. That said, we did notice a few minor mismatches during testing, especially with more complex mixed-language queries.
 
 ---
 
@@ -487,17 +487,17 @@ The retriever generally picks the right documents — it pulls code-switching gu
 
 ## 9. Conclusions
 
-From our testing, it seems that a RAG pipeline with strong multilingual embeddings can handle multilingual e-commerce queries reasonably well in practice, even without fine-tuning anything. That said, this observation is based on a relatively small test setup, so it may not generalize perfectly. Here's what we learned:
+From our testing, it seems that a RAG pipeline with strong multilingual embeddings can handle multilingual e-commerce queries reasonably well in practice, even without fine-tuning anything. That said, this observation is based on a relatively small test setup, so it may not generalize perfectly. Here's roughly what we learned from this project:
 
-BGE-M3 turned out to be a pretty solid choice for multilingual retrieval, even though we weren't completely sure how well it would perform at the beginning. It correctly matched queries across 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected, although this might also depend on the types of queries included in our test set; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
+BGE-M3 turned out to be a pretty solid choice for multilingual retrieval, even though we weren't completely sure how well it would perform at the beginning. It was able to correctly match queries across around 10 different language combinations to the right KB documents — we got 100% on language detection and 96.67% on source citation rate. The cross-lingual matching worked better than we expected, although this might also depend on the types of queries included in our test set; a query in Chinese could pull up English or French documents about the same topic just through semantic similarity.
 
-Interestingly, code-switching didn't require any specialized model either. Our approach was pretty simple — just check for CJK and Latin characters in the same string, then pull from the code-switching KB documents. Combined with the right prompt instructions, the system handled queries like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
+Interestingly, code-switching actually didn't require any specialized model either. Our approach was pretty simple — we basically check for CJK and Latin characters in the same string, and then pull from the code-switching KB documents. Combined with the right prompt instructions, the system handled queries like *"我的laptop screen flickering，warranty能cover吗？"* without trouble.
 
-One clear improvement we saw was in hallucination — the RAG approach made a noticeable difference here. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system hit 100% answer coverage because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
+One clear improvement we saw was in hallucination — the RAG approach made a noticeable difference here. Compared to a pure LLM baseline (62% answer coverage, ~25% hallucination rate), our system reached 100% answer coverage in this setup because every response is grounded in retrieved documents. That's a +38% improvement in answer relevance and +41.67% in source attribution.
 
 For sentiment, the rule-based approach ended up being good enough for our use case, even though it's relatively simple. It caught angry customers in 2 out of 3 cases with zero false positives — no neutral query ever triggered an escalation. A neural sentiment model might be more accurate, but for our use case the keyword-based approach was sufficient and much easier to implement, so we decided to keep it simple.
 
-One decision that turned out to be especially important was the fallback chain. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system could still return something useful even when certain services failed or weren't available. In practice, it degraded to mock mode during development, but the architecture is there for production use, although we didn't fully test it in a real production environment, so this part would need further validation.
+One decision that turned out to be especially important was the fallback chain. Having ZhipuAI → HuggingFace → Ollama → Mock meant the system could still return something useful even when certain services failed or weren't available. In practice, it degraded to mock mode during development, but the architecture is there for production use, although we didn't fully test it in a real production environment, so this part would probably need further validation in a real setting.
 
 ### Limitations & Future Work
 
